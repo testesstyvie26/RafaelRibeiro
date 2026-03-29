@@ -35,23 +35,30 @@
     margin: 0;
   }
 
+  html {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
   body {
     background: var(--bg);
     color: var(--text);
     font-family: var(--body);
     font-size: 13px;
     line-height: 1.55;
-    width: 210mm;
-    min-height: 297mm;
+    width: 100%;
+    max-width: 960px;
+    min-height: 100vh;
     margin: 0 auto;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: visible;
   }
 
   /* ── BACKGROUND GRID ── */
   body::before {
     content: '';
-    position: fixed;
+    position: absolute;
     inset: 0;
     background-image:
       linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
@@ -63,7 +70,7 @@
 
   body::after {
     content: '';
-    position: fixed;
+    position: absolute;
     top: -50%;
     left: -20%;
     width: 60%;
@@ -673,7 +680,7 @@
       <div class="contact-row">
         <div class="contact-item"><span class="ic">◉</span> Curitiba, PR / Rio de Janeiro, RJ</div>
         <div class="contact-item"><span class="ic">☏</span> (21) 98682-3676</div>
-        <div class="contact-item"><span class="ic">✉</span> rafael_styvie@hotmail.com</div>
+        <div class="contact-item"><span class="ic">✉</span> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e795868186828bb894939e918e82a78f88938a868e8bc984888a">[email&#160;protected]</a></div>
         <div class="contact-item"><span class="ic">⬡</span> <a href="https://www.linkedin.com/in/rafaelribeiro01">linkedin.com/in/rafaelribeiro01</a></div>
       </div>
 
@@ -1151,10 +1158,4 @@
 
 <!-- ══════════════ FOOTER ══════════════ -->
 <footer>
-  <div class="footer-left">RAFAEL.RIBEIRO // INFOSEC.SPECIALIST // 2026</div>
-  <div class="footer-right">AVAILABLE FOR NEW OPPORTUNITIES ◉</div>
-</footer>
-
-</div><!-- end page -->
-</body>
-</html>
+  <div class="footer-left">RAFAEL.RIBEIRO // INFOSEC.SPECIALIST // 2026
