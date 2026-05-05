@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linha do tempo — Rafael Ribeiro</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050a0f;
+    --bg2: #080f17;
+    --panel: #0d1b2a;
+    --panel2: #101e2e;
+    --green: #00ff88;
+    --green2: #00cc6a;
+    --cyan: #00d4ff;
+    --blue: #0066ff;
+    --orange: #ff6b00;
+    --text: #c8d8e8;
+    --text2: #7a9bb5;
+    --text3: #445566;
+    --mono: 'Share Tech Mono', monospace;
+    --title: 'Exo 2', sans-serif;
+    --body: 'Rajdhani', sans-serif;
+    --border: rgba(0,212,255,0.15);
+  }
+
+  html[data-theme="light"] {
+    color-scheme: light;
+    --bg: #eef2f7;
+    --bg2: #e4eaf2;
+    --panel: #ffffff;
+    --panel2: #f0f4fa;
+    --green: #007a52;
+    --green2: #009060;
+    --cyan: #006b99;
+    --blue: #0044cc;
+    --orange: #c45a00;
+    --text: #152430;
+    --text2: #3d5266;
+    --text3: #5c6e7e;
+    --border: rgba(0, 90, 130, 0.2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { color-scheme: dark; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 15px;
+    line-height: 1.55;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 30px 30px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 24px 80px;
+  }
+
+  header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+  }
+
+  header::before {
+    content: '';
+    display: block;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--green), var(--cyan), var(--green), transparent);
+    margin: -28px -24px 20px;
+    width: calc(100% + 48px);
+  }
+
+  h1 {
+    font-family: var(--title);
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+
+  .sub {
+    color: var(--text2);
+    font-size: 1rem;
+    max-width: 52ch;
+  }
+
+  .nav-top {
+    margin-top: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .nav-top a {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    border-radius: 3px;
+    background: var(--panel2);
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+  }
+
+  .nav-top a:hover {
+    box-shadow: 0 0 18px rgba(0, 212, 255, 0.2);
+    transform: translateY(-1px);
+  }
+
+  .btn-theme {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  section {
+    margin-bottom: 36px;
+  }
+
+  h2 {
+    font-family: var(--title);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--green);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  h2::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    margin-bottom: 18px;
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+
+  .legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text2);
+  }
+
+  .legend i {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .chart-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 12px 8px;
+    overflow-x: auto;
+  }
+
+  .chart-svg {
+    display: block;
+    min-width: 920px;
+    width: 100%;
+    height: auto;
+  }
+
+  .bar {
+    cursor: pointer;
+    transition: filter 0.15s ease, opacity 0.15s ease;
+  }
+
+  .bar:hover, .bar:focus {
+    filter: brightness(1.15);
+  }
+
+  .bar.dim {
+    opacity: 0.35;
+  }
+
+  .tip {
+    position: fixed;
+    z-index: 100;
+    pointer-events: none;
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    max-width: 280px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+    opacity: 0;
+    transition: opacity 0.12s ease;
+  }
+
+  .tip.visible { opacity: 1; }
+
+  .tip strong {
+    display: block;
+    font-family: var(--title);
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .tip .role { color: var(--cyan); font-size: 11px; margin-bottom: 6px; }
+  .tip .focus { color: var(--text2); font-size: 11px; line-height: 1.45; }
+
+  .focus-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+  }
+
+  .focus-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    border-left: 3px solid var(--accent, var(--green));
+  }
+
+  .focus-card h3 {
+    font-family: var(--title);
+    font-size: 0.88rem;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .focus-card .period {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    margin-bottom: 8px;
+  }
+
+  .focus-card p {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .chip {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 3px 8px;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    background: rgba(0,212,255,0.06);
+  }
+
+  footer {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 640px) {
+    h1 { font-size: 1.4rem; }
+  }
+</style>
+<script>
+(function () {
+  try {
+    var k = 'rr-cv-theme';
+    var t = localStorage.getItem(k);
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Linha do tempo profissional</h1>
+    <p class="sub">Posições ocupadas ao longo dos anos e pontos focais de atuação (AppSec, governança, perímetro, cloud/DevSecOps).</p>
+    <div class="nav-top">
+      <a href="index.html">← Voltar ao currículo</a>
+      <button type="button" class="btn-theme" id="btnTheme" aria-label="Alternar tema">Tema</button>
+    </div>
+  </header>
+
+  <section aria-labelledby="sec-chart">
+    <h2 id="sec-chart">Gráfico — cargos no tempo</h2>
+    <p style="color:var(--text2);font-size:14px;margin-bottom:14px;max-width:65ch">
+      Cada faixa horizontal representa um vínculo. Passe o mouse (ou foco) sobre as barras para ver cargo, empresa e focos. Períodos sobrepostos aparecem em linhas diferentes.
+    </p>
+    <div class="legend" id="legendFocus"></div>
+    <div class="chart-card">
+      <svg class="chart-svg" id="chart" viewBox="0 0 1000 420" role="img" aria-label="Gráfico de Gantt com experiências profissionais"></svg>
+    </div>
+  </section>
+
+  <section aria-labelledby="sec-focal">
+    <h2 id="sec-focal">Pontos focais por fase</h2>
+    <div class="focus-grid" id="focusCards"></div>
+  </section>
+
+  <footer>Rafael Ribeiro · visualização derivada do currículo · 2026</footer>
+</div>
+
+<div class="tip" id="tip" role="tooltip"></div>
+
+<script>
+(function () {
+  var KEY = 'rr-cv-theme';
+  var root = document.documentElement;
+  var btnTheme = document.getElementById('btnTheme');
+
+  function labelTheme() {
+    var isLight = root.getAttribute('data-theme') === 'light';
+    if (btnTheme) btnTheme.textContent = isLight ? 'Tema escuro' : 'Tema claro';
+  }
+
+  function applyTheme(theme) {
+    root.setAttribute('data-theme', theme);
+    try { localStorage.setItem(KEY, theme); } catch (e) {}
+    labelTheme();
+  }
+
+  if (!root.getAttribute('data-theme')) {
+    try {
+      var s = localStorage.getItem(KEY);
+      if (s === 'light' || s === 'dark') applyTheme(s);
+      else if (window.matchMedia('(prefers-color-scheme: light)').matches) applyTheme('light');
+      else applyTheme('dark');
+    } catch (e) { applyTheme('dark'); }
+  } else labelTheme();
+
+  btnTheme.addEventListener('click', function () {
+    applyTheme(root.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+  });
+
+  function ym(y, m) {
+    return y + (m - 1) / 12;
+  }
+
+  var FOCUS = {
+    appsec: { label: 'AppSec / SAST·DAST', color: '#00d4ff' },
+    gov: { label: 'Governança / ISO·LGPD', color: '#9966ff' },
+    perimeter: { label: 'Perímetro / SOC', color: '#ff6b00' },
+    devsec: { label: 'DevSecOps / Cloud', color: '#00ff88' }
+  };
+
+  var ROLES = [
+    { company: 'COMTEX S.A', role: 'Estagiário / Analista de Infra', start: ym(2013, 1), end: ym(2015, 12), focus: ['devsec'], stack: ['Infra', 'TI'] },
+    { company: 'Zallppy / Ticket Log', role: 'Especialista Segurança de Aplicações Sr.', start: ym(2020, 1), end: ym(2022, 12), focus: ['appsec', 'devsec'], stack: ['CheckMarx', 'DefectDojo', 'K8s'] },
+    { company: 'Central System S.A', role: 'Dev Fullstack / Seg. Informação', start: ym(2020, 1), end: ym(2020, 10), focus: ['appsec', 'devsec'], stack: ['Fullstack', 'InfoSec'] },
+    { company: 'Vertigo Tecnologia', role: 'Analista DevSecOps Pleno', start: ym(2020, 11), end: ym(2021, 3), focus: ['devsec'], stack: ['Terraform', 'CI/CD', 'IAM'] },
+    { company: 'IK Solution', role: 'Analista de Segurança da Informação Sr.', start: ym(2021, 8), end: ym(2023, 7), focus: ['perimeter', 'gov'], stack: ['Palo Alto', 'Tenable', 'ISO 27001'] },
+    { company: 'FGV', role: 'Analista de Segurança de Aplicações Sr.', start: ym(2022, 1), end: ym(2023, 4), focus: ['appsec', 'gov'], stack: ['SonarQube', 'OpenVAS', 'Compliance'] },
+    { company: 'NSTech Trizy (Cosan)', role: 'Analista de Segurança da Informação Sr.', start: ym(2022, 4), end: ym(2025, 4), focus: ['gov', 'devsec', 'perimeter'], stack: ['Veracode', 'ISO 27001', 'Kubernetes'] },
+    { company: 'CVC Corp', role: 'Especialista AppSec e Governança TI', start: ym(2022, 8), end: ym(2025, 1), focus: ['appsec', 'gov'], stack: ['SonarQube', 'AWS', 'OCI', 'LGPD'] },
+    { company: 'Locaweb (LWSA) – Vindi', role: 'Analista de Segurança da Informação Sr.', start: ym(2025, 1), end: ym(2026, 5), focus: ['appsec', 'devsec'], stack: ['SDLC', 'Threat modeling', 'SAST/DAST'] }
+  ];
+
+  var minT = ym(2012, 6);
+  var maxT = ym(2026, 8);
+  var span = maxT - minT;
+
+  function xScale(t) {
+    return ((t - minT) / span) * 920 + 72;
+  }
+
+  function assignLanes(items) {
+    var sorted = items.slice().sort(function (a, b) { return a.start - b.start; });
+    var laneEnds = [];
+    sorted.forEach(function (item) {
+      var lane = 0;
+      for (; lane < laneEnds.length; lane++) {
+        if (laneEnds[lane] <= item.start) break;
+      }
+      laneEnds[lane] = item.end;
+      item.lane = lane;
+    });
+    return sorted;
+  }
+
+  assignLanes(ROLES);
+  var laneCount = Math.max.apply(null, ROLES.map(function (r) { return r.lane; })) + 1;
+  var laneHeight = 26;
+  var topY = 48;
+  var axisY = topY + laneCount * laneHeight + 28;
+
+  var svg = document.getElementById('chart');
+  svg.setAttribute('viewBox', '0 0 1000 ' + (axisY + 56));
+
+  var ns = 'http://www.w3.org/2000/svg';
+
+  function el(name, attrs) {
+    var e = document.createElementNS(ns, name);
+    if (attrs) Object.keys(attrs).forEach(function (k) { e.setAttribute(k, attrs[k]); });
+    return e;
+  }
+
+  var gridG = el('g', { class: 'grid' });
+  svg.appendChild(gridG);
+
+  for (var y = 2013; y <= 2027; y++) {
+    var gx = xScale(y);
+    var line = el('line', {
+      x1: gx, y1: 36, x2: gx, y2: axisY - 8,
+      stroke: 'var(--border)', 'stroke-width': y % 2 ? 0.6 : 1,
+      opacity: 0.85
+    });
+    gridG.appendChild(line);
+    var label = el('text', {
+      x: gx, y: 28, fill: 'var(--text3)', 'font-size': 10,
+      'font-family': 'Share Tech Mono, monospace', 'text-anchor': 'middle'
+    });
+    label.textContent = String(y);
+    svg.appendChild(label);
+  }
+
+  var axisLine = el('line', {
+    x1: xScale(minT), y1: axisY, x2: xScale(maxT), y2: axisY,
+    stroke: 'var(--cyan)', 'stroke-width': 1, opacity: 0.5
+  });
+  svg.appendChild(axisLine);
+
+  var nowX = xScale(ym(2026, 5));
+  var nowMark = el('g');
+  nowMark.appendChild(el('line', { x1: nowX, y1: 32, x2: nowX, y2: axisY + 4, stroke: 'var(--green)', 'stroke-width': 1.5, opacity: 0.9 }));
+  var nt = el('text', { x: nowX, y: axisY + 18, fill: 'var(--green)', 'font-size': 9, 'font-family': 'Share Tech Mono, monospace', 'text-anchor': 'middle' });
+  nt.textContent = 'hoje';
+  nowMark.appendChild(nt);
+  svg.appendChild(nowMark);
+
+  ROLES.forEach(function (r, idx) {
+    var x1 = xScale(r.start);
+    var x2 = xScale(r.end);
+    var y = topY + r.lane * laneHeight;
+    var w = Math.max(x2 - x1, 4);
+    var primary = FOCUS[r.focus[0]].color;
+    var rect = el('rect', {
+      x: x1, y: y, width: w, height: laneHeight - 7, rx: 3,
+      fill: primary, opacity: 0.72,
+      stroke: 'rgba(255,255,255,0.12)', 'stroke-width': 0.5,
+      tabindex: 0, class: 'bar', 'data-idx': String(idx)
+    });
+    rect.addEventListener('mouseenter', showTip);
+    rect.addEventListener('mousemove', moveTip);
+    rect.addEventListener('mouseleave', hideTip);
+    rect.addEventListener('focus', showTip);
+    rect.addEventListener('blur', hideTip);
+    svg.appendChild(rect);
+  });
+
+  var tip = document.getElementById('tip');
+  var activeFilter = null;
+
+  function showTip(ev) {
+    var idx = ev.target.getAttribute('data-idx');
+    if (idx == null) return;
+    var r = ROLES[+idx];
+    var ftxt = r.focus.map(function (k) { return FOCUS[k].label; }).join(' · ');
+    tip.innerHTML = '<strong>' + r.company + '</strong><div class="role">' + r.role + '</div><div class="period" style="color:var(--text3)">' +
+      formatPeriod(r.start, r.end) + '</div><div class="focus">' + ftxt + '</div><div class="chips" style="margin-top:8px">' +
+      r.stack.map(function (s) { return '<span class="chip">' + s + '</span>'; }).join('') + '</div>';
+    tip.classList.add('visible');
+    moveTip(ev);
+  }
+
+  function formatPeriod(a, b) {
+    function fmt(t) {
+      var y = Math.floor(t);
+      var m = Math.round((t - y) * 12) + 1;
+      var mo = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+      return mo[m - 1] + ' ' + y;
+    }
+    return fmt(a) + ' → ' + fmt(b);
+  }
+
+  function moveTip(ev) {
+    var cx = ev.clientX != null ? ev.clientX : (ev.touches && ev.touches[0] && ev.touches[0].clientX) || 0;
+    var cy = ev.clientY != null ? ev.clientY : (ev.touches && ev.touches[0] && ev.touches[0].clientY) || 0;
+    tip.style.left = Math.min(cx + 14, window.innerWidth - 300) + 'px';
+    tip.style.top = Math.min(cy + 14, window.innerHeight - 180) + 'px';
+  }
+
+  function hideTip() {
+    tip.classList.remove('visible');
+  }
+
+  function highlightFocus(key) {
+    activeFilter = activeFilter === key ? null : key;
+    var bars = svg.querySelectorAll('.bar');
+    bars.forEach(function (b, i) {
+      var r = ROLES[i];
+      var match = !activeFilter || r.focus.indexOf(activeFilter) !== -1;
+      b.classList.toggle('dim', !match);
+    });
+    legend.querySelectorAll('button').forEach(function (btn) {
+      var k = btn.getAttribute('data-focus');
+      btn.style.outline = activeFilter === k ? '2px solid var(--cyan)' : 'none';
+    });
+  }
+
+  var legend = document.getElementById('legendFocus');
+  Object.keys(FOCUS).forEach(function (k) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.setAttribute('data-focus', k);
+    b.style.cssText = 'display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid var(--border);border-radius:4px;padding:6px 12px;cursor:pointer;font:inherit;color:var(--text2);';
+    var dot = document.createElement('i');
+    dot.style.background = FOCUS[k].color;
+    b.appendChild(dot);
+    b.appendChild(document.createTextNode('Filtrar: ' + FOCUS[k].label));
+    b.addEventListener('click', function () { highlightFocus(k); });
+    legend.appendChild(b);
+  });
+
+  var PHASES = [
+    { title: 'Infra e primeiros passos', period: '2013 — 2015', accent: '#0066ff', text: 'Estágio e infraestrutura: base operacional em TI antes da especialização em segurança.', chips: ['Infra', 'Suporte'] },
+    { title: 'AppSec e DevSecOps em escala', period: '2020 — 2022', accent: 'var(--cyan)', text: 'Consolidação em análise de aplicações, ferramentas SAST/DAST, cultura DevSecOps e pipelines (Zallppy, Central, Vertigo).', chips: ['SAST/DAST', 'DefectDojo', 'K8s', 'Terraform'] },
+    { title: 'Governança, perímetro e multicliente', period: '2021 — 2023', accent: '#ff6b00', text: 'Projetos com Firewalls, WAF, Tenable e ISO; atuação paralela em educação (FGV) e vulnerabilidades corporativas.', chips: ['Palo Alto', 'Auditorias', 'Treinamentos'] },
+    { title: 'Alto impacto regulatório', period: '2022 — 2025', accent: '#9966ff', text: 'NSTech e CVC: zeragem de vulnerabilidades críticas no ecossistema Cosan, ISO 27001, LGPD e AppSec em nuvem.', chips: ['ISO 27001', 'Cosan', 'AWS/OCI'] },
+    { title: 'SDLC e threat modeling', period: '2025 — atual', accent: 'var(--green)', text: 'Locaweb/Vindi: segurança integrada ao ciclo de desenvolvimento, modelagem de ameaças e governança técnica contínua.', chips: ['SDLC', 'Threat modeling'] }
+  ];
+
+  var fg = document.getElementById('focusCards');
+  PHASES.forEach(function (p) {
+    var card = document.createElement('article');
+    card.className = 'focus-card';
+    card.style.setProperty('--accent', p.accent);
+    card.innerHTML = '<h3>' + p.title + '</h3><div class="period">' + p.period + '</div><p>' + p.text + '</p><div class="chips">' +
+      p.chips.map(function (c) { return '<span class="chip">' + c + '</span>'; }).join('') + '</div>';
+    fg.appendChild(card);
+  });
+})();
+</script>
+</body>
+</html>
