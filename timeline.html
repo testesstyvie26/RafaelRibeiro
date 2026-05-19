@@ -404,7 +404,7 @@
     { company: 'FGV', role: 'Analista de Segurança de Aplicações Sr.', start: ym(2022, 1), end: ym(2023, 4), focus: ['appsec', 'gov'], stack: ['SonarQube', 'OpenVAS', 'Compliance'] },
     { company: 'NSTech Trizy (Cosan)', role: 'Analista de Segurança da Informação Sr.', start: ym(2022, 4), end: ym(2025, 4), focus: ['gov', 'devsec', 'perimeter'], stack: ['Veracode', 'ISO 27001', 'Kubernetes'] },
     { company: 'CVC Corp', role: 'Especialista AppSec e Governança TI', start: ym(2022, 8), end: ym(2025, 1), focus: ['appsec', 'gov'], stack: ['SonarQube', 'AWS', 'OCI', 'LGPD'] },
-    { company: 'Locaweb (LWSA) – Vindi', role: 'Analista de Segurança da Informação Sr.', start: ym(2025, 1), end: ym(2026, 5), focus: ['appsec', 'devsec'], stack: ['SDLC', 'Threat modeling', 'SAST/DAST'] }
+    { company: 'Locaweb (LWSA) – Vindi', role: 'Analista de Segurança da Informação Sr.', start: ym(2025, 1), end: ym(2026, 5), focus: ['appsec', 'devsec', 'gov'], stack: ['SDLC', 'Threat modeling', 'SAST/DAST', 'PCI DSS', 'BACEN'] }
   ];
 
   var minT = ym(2012, 6);
@@ -568,7 +568,7 @@
     { title: 'AppSec e DevSecOps em escala', period: '2020 — 2022', accent: 'var(--cyan)', text: 'Consolidação em análise de aplicações, SAST/DAST, correlatos corporativos (Qualys/Tenable) e observabilidade (Wazuh) em pipelines; cultura DevSecOps (Zallppy, Central, Vertigo).', chips: ['SAST/DAST', 'DefectDojo', 'Qualys', 'Wazuh', 'K8s', 'Terraform'] },
     { title: 'Governança, perímetro e multicliente', period: '2021 — 2023', accent: '#ff6b00', text: 'Projetos com Firewalls, WAF, proteção de endpoints (Symantec, Trend Micro), scanners Qualys/Tenable, Wazuh para correlação e ISO; atuação paralela na FGV (treinamentos, vulnerabilidades).', chips: ['Palo Alto', 'Qualys/Wazuh', 'Endpoints'] },
     { title: 'Alto impacto regulatório', period: '2022 — 2025', accent: '#9966ff', text: 'NSTech e CVC: zeragem de vulnerabilidades críticas no ecossistema Cosan, ISO 27001, LGPD e AppSec em nuvem.', chips: ['ISO 27001', 'Cosan', 'AWS/OCI'] },
-    { title: 'SDLC e threat modeling', period: '2025 — atual', accent: 'var(--green)', text: 'Locaweb/Vindi: segurança integrada ao ciclo de desenvolvimento, modelagem de ameaças e governança técnica contínua.', chips: ['SDLC', 'Threat modeling'] }
+    { title: 'SDLC e threat modeling', period: '2025 — atual', accent: 'var(--green)', text: 'Locaweb/Vindi: segurança integrada ao SDLC, modelagem de ameaças, SAST/DAST e apoio a PCI DSS e requisitos de regulação do Bacen.', chips: ['SDLC', 'PCI DSS', 'BACEN'] }
   ];
 
   var fg = document.getElementById('focusCards');
